@@ -393,7 +393,7 @@ function renderPublications(containerId, publications) {
     const li = document.createElement("li");
     li.innerHTML = `
       ${pub.authors} ${pub.title} ${pub.journal} ${pub.citation}
-      <a href="https://doi.org/${pub.doi}" target="_blank">doi:${pub.doi}</a>
+      ${(pub.doi && pub.doi.length > 0) ? ` <a href="https://doi.org/${pub.doi}" target="_blank">doi:${pub.doi}</a>` : ''}
     `;
     ol.appendChild(li);
   });
