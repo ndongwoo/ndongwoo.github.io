@@ -96,7 +96,7 @@
           <p>Otology Surgeon, Clinical Professor</p>
 			<p>Department of Otorhinolaryngology-Head and Neck Surgery, Seoul National University Bundang Hospital, Republic of Korea</p>
 		  <p>&nbsp;</p>
-		  <p>Last updated: 2025-10-25</p>
+		  <p>Last updated: 2025-11-01</p>
         </div>
 
         <div class="row">
@@ -386,19 +386,37 @@ const coAuthorPubs = [
 ];
 
 function renderPublications(containerId, publications) {
-  const container = document.getElementById(containerId);
-  const ol = document.createElement("ol");
+  const container = document.getElementById(containerId);
+  const ol = document.createElement("ol");
 
-  publications.forEach(pub => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${pub.authors} ${pub.title} ${pub.journal} ${pub.citation}
-      ${(pub.doi && pub.doi.length > 0) ? ` <a href="https://doi.org/${pub.doi}" target="_blank">doi:${pub.doi}</a>` : ''}
-    `;
-    ol.appendChild(li);
-  });
+  publications.forEach(pub => {
+    const li = document.createElement("li");
 
-  container.appendChild(ol);
+    // 1. 저자, 제목, 공백을 텍스트 노드로 추가
+    li.appendChild(document.createTextNode(`${pub.authors} ${pub.title} `));
+
+    // 2. 저널(journal)은 <i> 태그로 생성
+    const journalEl = document.createElement("i");
+    journalEl.textContent = pub.journal; // textContent를 사용해야 안전합니다.
+    li.appendChild(journalEl);
+
+    // 3. 인용(citation) 정보 추가
+    li.appendChild(document.createTextNode(` ${pub.citation}`));
+
+    // 4. DOI 링크 추가
+    if (pub.doi && pub.doi.length > 0) {
+      li.appendChild(document.createTextNode(' ')); // 링크 앞 공백
+      const doiLink = document.createElement("a");
+      doiLink.href = `https://doi.org/${pub.doi}`;
+      doiLink.target = "_blank";
+      doiLink.textContent = `doi:${pub.doi}`;
+      li.appendChild(doiLink);
+    }
+
+    ol.appendChild(li);
+  });
+
+  container.appendChild(ol);
 }
 
 renderPublications("first-author", firstAuthorPubs);
